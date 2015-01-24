@@ -11,12 +11,13 @@ public class TileManager :  DesignPattern.Singleton<TileManager>
 
 	protected TileManager () {}
 
-
 	// ----------
 	// VARIABLE
 	// ----------
 
 	protected Tile[] tiles;
+
+	public List<TileStart> tileStart;
 
 
 	// ----------
@@ -29,6 +30,8 @@ public class TileManager :  DesignPattern.Singleton<TileManager>
 		foreach(Tile tile in tiles)
 		{
 			tile.LoadAvailableTiles(tiles);
+			if(tile.GetType() == typeof(TileStart))
+				Debug.Log("c'est trop cool Path ton chemin #VROOOUM!");
 		}
 	}
 
