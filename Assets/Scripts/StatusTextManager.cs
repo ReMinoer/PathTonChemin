@@ -17,6 +17,13 @@ public class StatusTextManager : MonoBehaviour
 	void Start()
 	{
 		Game.Instance.StatusTextManager = this;
+		GameStartPanel.SetActive(false);
+		RoundStartPanel.SetActive(false);
+		TacticalStartPanel.SetActive(false);
+		TacticalEndPanel.SetActive(false);
+		ActionStartPanel.SetActive(false);
+		ActionEndPanel.SetActive(false);
+		GameEndPanel.SetActive(false);
 	}
 
 	public void ChangeState(State state, object args = null)
@@ -39,7 +46,8 @@ public class StatusTextManager : MonoBehaviour
 		case State.GameEnd: panel = GameEndPanel; break;
 		default: return;
 		}
-
+		
+		panel.SetActive(true);
 		panel.animation.Play();
 	}
 

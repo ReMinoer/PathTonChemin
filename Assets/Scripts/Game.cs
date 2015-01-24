@@ -9,6 +9,7 @@ public class Game : Singleton<Game>
 	protected Game() {}
 
 	public StatusTextManager StatusTextManager;
+	public PlayerInterfaceManager PlayerInterfaceManager;
 
 	public int NbPlayers = 4;
 	private int _currentPlayer;
@@ -39,6 +40,20 @@ public class Game : Singleton<Game>
 		StatusTextManager.ChangeState(StatusTextManager.State.TacticalStart, _currentPlayer);
 	}
 	
+	void Tactical()
+	{
+		PlayerInterfaceManager.State state;
+		switch (_currentPlayer)
+		{
+		case 1: state = PlayerInterfaceManager.State.TacticalPlayerOne; break;
+		case 2: state = PlayerInterfaceManager.State.TacticalPlayerTwo; break;
+		case 3: state = PlayerInterfaceManager.State.TacticalPlayerThree; break;
+		case 4: state = PlayerInterfaceManager.State.TacticalPlayerFour; break;
+		default: return;
+		}
+		PlayerInterfaceManager.ChangeState(state);
+	}
+	
 	void TacticalTimerEnd()
 	{
 		StatusTextManager.ChangeState(StatusTextManager.State.TacticalEnd);
@@ -60,7 +75,8 @@ public class Game : Singleton<Game>
 
 	void Play()
 	{
-		PlayerWin();
+		//PlayerWin();
+		PlayerInterfaceManager.ChangeState(PlayerInterfaceManager.State.Action);
 	}
 
 	void PlayerKilled(int idPlayer)
@@ -77,6 +93,7 @@ public class Game : Singleton<Game>
 
 	void ActionEnd()
 	{
+		PlayerInterfaceManager.DisableAll();
 		StatusTextManager.ChangeState(StatusTextManager.State.ActionEnd);
 	}
 
@@ -101,7 +118,8 @@ public class Game : Singleton<Game>
 		case State.GameStart: Start(); break;
 		case State.RoundStart: RoundInit(); break;
 		case State.TacticalStart: TacticalInit(); break;
-		case State.TacticalEnd: TacticalTimerEnd(); break;
+		case State.Tactical: Tactical(); break;
+		case State.TacticalTimerEnd: TacticalTimerEnd(); break;
 		case State.TacticalNextPlayer: TacticalNextPlayer(); break;
 		case State.Play: Play(); break;
 		case State.PlayerKilled: PlayerKilled((int)args); break;
@@ -116,7 +134,8 @@ public class Game : Singleton<Game>
 		GameStart,
 		RoundStart,
 		TacticalStart,
-		TacticalEnd,
+		Tactical,
+		TacticalTimerEnd,
 		TacticalNextPlayer,
 		Play,
 		PlayerKilled,

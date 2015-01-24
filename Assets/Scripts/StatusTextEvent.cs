@@ -7,6 +7,7 @@ public class StatusTextEvent : MonoBehaviour {
 
 	void OnAnimationEnd()
 	{
+		this.gameObject.SetActive(false);
 		Game.Instance.ChangeState(GameStateToInvoke);
 	}
 }
