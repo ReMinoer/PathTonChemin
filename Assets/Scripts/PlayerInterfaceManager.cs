@@ -2,7 +2,7 @@
 using UnityEngine.UI;
 using System.Collections;
 
-public class PlayerInterfaceManager : MonoBehaviour
+public class PlayerInterfaceManager : DesignPattern.Singleton<PlayerInterfaceManager>
 {
 	public GameObject PlayerOneInterface;
 	public GameObject PlayerTwoInterface;
@@ -13,9 +13,8 @@ public class PlayerInterfaceManager : MonoBehaviour
 	public GameObject PlayerThreeTimer;
 	public GameObject PlayerFourTimer;
 	
-	void Start()
+	void Awake()
 	{
-		Game.Instance.PlayerInterfaceManager = this;
 		PlayerOneInterface.SetActive(false);
 		PlayerTwoInterface.SetActive(false);
 		PlayerThreeInterface.SetActive(false);

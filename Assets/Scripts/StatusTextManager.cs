@@ -2,7 +2,7 @@
 using UnityEngine.UI;
 using System.Collections;
 
-public class StatusTextManager : MonoBehaviour
+public class StatusTextManager : DesignPattern.Singleton<StatusTextManager>
 {
 	public GameObject GameStartPanel;
 	public GameObject RoundStartPanel;
@@ -14,9 +14,8 @@ public class StatusTextManager : MonoBehaviour
 	public GameObject ActionEndPanel;
 	public GameObject GameEndPanel;
 
-	void Start()
+	void Awake()
 	{
-		Game.Instance.StatusTextManager = this;
 		GameStartPanel.SetActive(false);
 		RoundStartPanel.SetActive(false);
 		TacticalStartPanel.SetActive(false);
@@ -46,7 +45,7 @@ public class StatusTextManager : MonoBehaviour
 		case State.GameEnd: panel = GameEndPanel; break;
 		default: return;
 		}
-		
+
 		panel.SetActive(true);
 		panel.animation.Play();
 	}

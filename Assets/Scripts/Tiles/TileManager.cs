@@ -25,7 +25,11 @@ public class TileManager :  DesignPattern.Singleton<TileManager>
 
 	void Start ()
 	{
-		tiles = gameObject.GetComponents<Tile>();
+		tiles = gameObject.GetComponentsInChildren<Tile>();
+		foreach(Tile tile in tiles)
+		{
+			tile.LoadAvailableTiles(tiles);
+		}
 	}
 
 

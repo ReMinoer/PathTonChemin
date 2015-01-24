@@ -1,10 +1,10 @@
 ﻿using UnityEngine;
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using System.Linq;
-using DesignPattern;
 
-public class Game : Singleton<Game>
+public class Game : DesignPattern.Singleton<Game>
 {
 	protected Game() {}
 
@@ -15,6 +15,8 @@ public class Game : Singleton<Game>
 	private int _currentPlayer;
 	private bool[] _playerAlive;
 
+	private List<TacticalData> tacticalDatas;
+
 	public int NbRounds = 5;
 	private int _currentRound;
 
@@ -22,6 +24,13 @@ public class Game : Singleton<Game>
 	void Start ()
 	{
 		_currentRound = 1;
+		tacticalDatas = new List<TacticalData>();
+		for(int player = 1; player <= NbPlayers; player++)
+		{
+			TacticalData tacticalData = TacticalData.New();
+			tacticalData.Player = player;
+			tacticalDatas.Add(tacticalData);
+		}
 		StatusTextManager.ChangeState(StatusTextManager.State.GameStart);
 	}
 
@@ -51,11 +60,13 @@ public class Game : Singleton<Game>
 		case 4: state = PlayerInterfaceManager.State.TacticalPlayerFour; break;
 		default: return;
 		}
+		tacticalDatas[_currentPlayer-1].StartTacticalPhase();
 		PlayerInterfaceManager.ChangeState(state);
 	}
 	
 	void TacticalTimerEnd()
 	{
+		tacticalDatas[_currentPlayer-1].EndTacticalPhase();
 		StatusTextManager.ChangeState(StatusTextManager.State.TacticalEnd);
 	}
 	

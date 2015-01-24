@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using UnityEditor;
 using System.Collections;
+using System.Collections.Generic;
 
 public class Tile : MonoBehaviour {
 
@@ -15,6 +16,8 @@ public class Tile : MonoBehaviour {
 	public bool up = false;
 	public bool down = false;
 
+	private List<Tile> availableTiles;
+
 
 	// ----------
 	// UNITY
@@ -22,7 +25,7 @@ public class Tile : MonoBehaviour {
 
 	void Start ()
 	{
-		
+
 	}
 	
 	void Update ()
@@ -34,5 +37,51 @@ public class Tile : MonoBehaviour {
 	// ----------
 	// UTILITIES
 	// ----------
+
+	public bool TileAvailable (Tile _tile)
+	{
+		return availableTiles.Contains(_tile);
+	}
+
+	public void LoadAvailableTiles (Tile[] _tiles)
+	{
+		availableTiles = new List<Tile>();
+
+		foreach(Tile tile in _tiles)
+		{
+			if(right)
+			{
+				if(transform.position+Vector3.right==tile.transform.position)
+				{
+					availableTiles.Add(tile);
+					continue;
+				}
+			}
+			if(left)
+			{
+				if(transform.position+Vector3.left==tile.transform.position)
+				{
+					availableTiles.Add(tile);
+					continue;
+				}
+			}
+			if(up)
+			{
+				if(transform.position+Vector3.forward==tile.transform.position)
+				{
+					availableTiles.Add(tile);
+					continue;
+				}
+			}
+			if(down)
+			{
+				if(transform.position+Vector3.back==tile.transform.position)
+				{
+					availableTiles.Add(tile);
+					continue;
+				}
+			}			
+		}
+	}
 
 }
