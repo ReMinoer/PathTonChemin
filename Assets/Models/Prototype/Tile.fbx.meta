@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: 22da0a7dca81cd148afeb9a013da2800
+guid: 059af730d463c764baf855bddd285d7d
 ModelImporter:
   serializedVersion: 16
   fileIDToRecycleName:
@@ -7,12 +7,12 @@ ModelImporter:
     400000: //RootNode
     2300000: //RootNode
     3300000: //RootNode
-    4300000: Tile_Sol
+    4300000: Tile
     9500000: //RootNode
   materials:
     importMaterials: 1
     materialName: 1
-    materialSearch: 0
+    materialSearch: 2
   animations:
     legacyGenerateAnimations: 4
     bakeSimulation: 0
@@ -45,7 +45,7 @@ ModelImporter:
     normalSmoothAngle: 60
     splitTangentsAcrossUV: 1
     normalImportMode: 0
-    tangentImportMode: 0
+    tangentImportMode: 1
   importAnimation: 1
   copyAvatar: 0
   humanDescription:
