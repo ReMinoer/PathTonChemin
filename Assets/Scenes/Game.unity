@@ -2118,7 +2118,7 @@ MonoBehaviour:
   StatusTextManager: {fileID: 1218955594}
   PlayerInterfaceManager: {fileID: 1834460793}
   nbPlayer: 4
-  NbRounds: 1
+  NbRounds: 5
   TactiqueTime: 25
   SfxStart: {fileID: 8300000, guid: f5ee7ba2c8a2a8b4dba9a91aac32720c, type: 3}
   SfxStop: {fileID: 8300000, guid: ca737318383573f4d850ed59839a5d7b, type: 3}
