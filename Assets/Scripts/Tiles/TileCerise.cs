@@ -37,6 +37,7 @@ public class TileCerise : Tile {
 		ceriseAnimator.SetTrigger("Take");
 		take = true;
 		_player.AddScore(10);
+		audio.Play();
 	}
 
 	// ----------

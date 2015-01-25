@@ -25,12 +25,13 @@ public class Game : DesignPattern.Singleton<Game>
 	public float TactiqueTime;
 
 	private bool _musicPack = true;
+	public AudioClip SfxStart;
+	public AudioClip SfxStop;
+	public AudioClip SfxWinGame;
 
 	// Use this for initialization
 	void Start ()
 	{
-		_currentRound = 1;
-
 		TacticalPhases = new List<TacticalPhase>();
 		Players = new List<PlayerMotor>();
 		for(int player = 1; player <= nbPlayer; player++)
@@ -44,7 +45,6 @@ public class Game : DesignPattern.Singleton<Game>
 			else if(player==4)
 				playerColor = "Red";
 			PlayerMotor playerMotor = PlayerMotor.New("Prefabs/Players/Player_"+playerColor);
-			playerMotor.gameObject.SetActive(false);
 			Players.Add(playerMotor);
 			// TactialPhase Creation
 			TacticalPhase tacticalPhase = TacticalPhase.New();
@@ -57,6 +57,11 @@ public class Game : DesignPattern.Singleton<Game>
 
 	void TitleScreen ()
 	{
+		_currentRound = 1;
+
+		foreach (PlayerMotor player in Players)
+			player.gameObject.SetActive(false);
+
 		_musicPack = !_musicPack;
 		AudioManager.Instance.ChangeSong(AudioManager.SongType.ActionA, 0, 1);
 		
@@ -127,6 +132,9 @@ public class Game : DesignPattern.Singleton<Game>
 	
 	void ActionInit()
 	{
+		audio.clip = SfxStart;
+		audio.Play();
+
 		AudioManager.Instance.ChangeSong(_musicPack ? AudioManager.SongType.ActionA : AudioManager.SongType.ActionB, _currentRound-1, 1);
 		foreach (PlayerMotor player in Players)
 			player.gameObject.SetActive(true);
@@ -231,6 +239,9 @@ public class Game : DesignPattern.Singleton<Game>
 
 	void ActionEnd()
 	{
+		audio.clip = SfxStop;
+		audio.Play();
+
 		AudioManager.Instance.Stop (1);
 		PlayerInterfaceManager.DisableAll();
 		StatusTextManager.ChangeState(StatusTextManager.State.ActionEnd);
@@ -247,6 +258,9 @@ public class Game : DesignPattern.Singleton<Game>
 
 	void GameEnd()
 	{
+		audio.clip = SfxWinGame;
+		audio.Play();
+
 		Dictionary<int,int> scores = new Dictionary<int, int>();
 		for(int i = 0; i < Players.Count; i++)
 			scores.Add(i+1, Players[i].Score);
