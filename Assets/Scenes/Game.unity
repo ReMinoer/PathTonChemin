@@ -7456,6 +7456,7 @@ MonoBehaviour:
   ActionStartPanel: {fileID: 1154324896}
   ActionEndPanel: {fileID: 296341514}
   GameEndPanel: {fileID: 1795698980}
+  GameEndMessage: {fileID: 1216776015}
 --- !u!114 &1218955595
 MonoBehaviour:
   m_ObjectHideFlags: 0

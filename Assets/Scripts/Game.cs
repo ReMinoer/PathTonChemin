@@ -194,7 +194,10 @@ public class Game : DesignPattern.Singleton<Game>
 
 	void GameEnd()
 	{
-		StatusTextManager.ChangeState(StatusTextManager.State.GameEnd);
+		Dictionary<int,int> scores = new Dictionary<int, int>();
+		for(int i = 0; i < Players.Count; i++)
+			scores.Add(i+1, Players[i].Score);
+		StatusTextManager.ChangeState(StatusTextManager.State.GameEnd, scores);
 	}
 	
 	public void ChangeState(State state, object args = null)
