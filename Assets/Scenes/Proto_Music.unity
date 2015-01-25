@@ -1197,7 +1197,7 @@ MonoBehaviour:
   StatusTextManager: {fileID: 1218955594}
   PlayerInterfaceManager: {fileID: 1834460793}
   nbPlayer: 2
-  NbRounds: 1
+  NbRounds: 2
   TactiqueTime: 5
 --- !u!1 &251954921
 GameObject:
