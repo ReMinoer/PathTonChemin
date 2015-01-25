@@ -15,6 +15,10 @@ public class Waypoint : DesignPattern.Factory<Waypoint> {
 	public int state;
 	// public Action action;
 
+	public Vector3 Position
+	{
+		get { return tile.transform.position; }
+	}
 
 	// ----------
 	// UNITY

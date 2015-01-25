@@ -8,12 +8,13 @@ public class Game : DesignPattern.Singleton<Game>
 {
 	protected Game() {}
 
+	private State _state;
+
 	public StatusTextManager StatusTextManager;
 	public PlayerInterfaceManager PlayerInterfaceManager;
 
-	public int NbPlayers = 4;
+	public List<PlayerMotor> Players = new List<PlayerMotor>();
 	private int _currentPlayer;
-	private bool[] _playerAlive;
 
 	private List<TacticalData> tacticalDatas;
 
@@ -26,22 +27,27 @@ public class Game : DesignPattern.Singleton<Game>
 	void Start ()
 	{
 		_currentRound = 1;
+
+		foreach (PlayerMotor player in Players)
+		{
+			player.gameObject.SetActive(false);
+			player.Revive();
+		}
+
 		tacticalDatas = new List<TacticalData>();
-		for(int player = 1; player <= NbPlayers; player++)
+		for(int player = 1; player <= Players.Count; player++)
 		{
 			TacticalData tacticalData = TacticalData.New();
 			tacticalData.Player = player;
 			tacticalDatas.Add(tacticalData);
 		}
+
 		StatusTextManager.ChangeState(StatusTextManager.State.GameStart);
 	}
 
 	void RoundInit()
 	{
 		_currentPlayer = 1;
-		_playerAlive = new bool[NbPlayers];
-		for (int i = 0; i < NbPlayers; i++)
-			_playerAlive[i] = true;
 
 		StatusTextManager.ChangeState(StatusTextManager.State.RoundStart, _currentRound);
 	}
@@ -75,7 +81,7 @@ public class Game : DesignPattern.Singleton<Game>
 	void TacticalNextPlayer()
 	{
 		_currentPlayer++;
-		if (_currentPlayer > NbPlayers)
+		if (_currentPlayer > Players.Count)
 			ActionInit();
 		else
 			TacticalInit();
@@ -83,19 +89,65 @@ public class Game : DesignPattern.Singleton<Game>
 	
 	void ActionInit()
 	{
+		foreach (PlayerMotor player in Players)
+			player.gameObject.SetActive(true);
 		StatusTextManager.ChangeState(StatusTextManager.State.ActionStart);
 	}
 
 	void Play()
 	{
-		//PlayerWin();
+		for(int player = 1; player <= Players.Count; player++)
+		{
+			Players[player-1].SetPath(tacticalDatas[player-1].waypoints);
+		}
 		PlayerInterfaceManager.ChangeState(PlayerInterfaceManager.State.Action);
+	}
+
+	void Update()
+	{
+		if (_state == State.Play)
+		{
+			if (isSynchroOnWait())
+			{
+				HandleActionEvents();
+				WakeUpAll();
+			}
+		}
+	}
+
+	bool isSynchroOnWait()
+	{
+		foreach(PlayerMotor player in Players)
+			if (!player.IsWaiting)
+				return false;
+
+		return true;
+	}
+
+	void HandleActionEvents()
+	{
+		for (int i = 0; i < Players.Count; i++)
+			for (int j = 0; j < Players.Count; j++)
+				if (i != j
+				    && (Players[i].transform.position == Players[j].transform.position
+				    || (Players[i].transform.position == Players[j].LastCase
+				    	&& Players[j].transform.position == Players[i].LastCase)))
+				{
+					PlayerKilled(i);
+					PlayerKilled(j);
+				}
+	}
+
+	void WakeUpAll()
+	{
+		foreach(PlayerMotor player in Players)
+			player.WakeUp();
 	}
 
 	void PlayerKilled(int idPlayer)
 	{
-		_playerAlive[idPlayer] = false;
-		if (_playerAlive.All(p => !p))
+		Players[idPlayer].Death();
+		if (Players.All(p => p.IsDead))
 			ActionEnd();
 	}
 	
@@ -126,6 +178,8 @@ public class Game : DesignPattern.Singleton<Game>
 	
 	public void ChangeState(State state, object args = null)
 	{
+		_state = state;
+		
 		switch (state)
 		{
 		case State.GameStart: Start(); break;

@@ -5,75 +5,79 @@ using System.Linq;
 
 public class PlayerMotor : MonoBehaviour
 {
-	public List<PlayerMove> Path = new List<PlayerMove>();
+	public List<Waypoint> Path { get; private set; }
+	public Vector3 LastCase { get; private set; }
+	public bool IsWaiting { get; private set; }
+	public bool IsDead { get; private set; }
 
-	public Vector2 CurrentCase = Vector2.zero;
-	public float SizeCase = 1;
-	public float LevelWidth = 10;
-	public float LevelHeight = 10;
+	private const float _delaiStartPeriod = 5;
+	private float _delaiStartElapsed;
 
 	public int Score = 0;
 
 	public float Speed = 2f;
 
-	private Vector2 LevelOrigin
-	{ get { return new Vector2(LevelWidth, LevelHeight) / 2; } }
-
 	// Use this for initialization
 	void Start ()
 	{
+		IsWaiting = false;
 	}
 	
 	// Update is called once per frame
 	void Update ()
 	{
-		if (Path.Any())
-		{
-			PlayerMove move = Path.First();
-			Vector3 direction = MoveToDir(move);
-			this.transform.position += direction * Speed * Time.deltaTime;
+		_delaiStartElapsed += Time.deltaTime;
+		if (_delaiStartElapsed < _delaiStartPeriod)
+			return;
 
-			Vector3 destination = (XYtoX0Z(CurrentCase) + direction) * SizeCase - XYtoX0Z(LevelOrigin) + XYtoX0Z(Vector2.one * 0.5f);
-			Vector3 levelPosition = this.transform.position;
-			Vector3 diff = destination - levelPosition;
-			if (Vector3.Dot(direction, diff) < 0)
+		if (Path.Any() && !IsWaiting)
+		{
+			Waypoint waypoint = Path.First();
+			Vector3 destination = waypoint.Position + Vector3.up * 0.5f;
+			Vector3 direction = (destination - this.transform.position).normalized;
+			this.transform.position += direction * Speed * Time.deltaTime;
+			
+			Vector3 diff = waypoint.Position - LastCase;
+
+			if (Vector3.Dot(direction, diff) < -0.5)
 			{
-				CurrentCase += new Vector2(direction.x, -direction.z);
-				this.transform.position = XYtoX0Z((CurrentCase * SizeCase) - LevelOrigin + Vector2.one * 0.5f);
+				IsWaiting = true;
+				LastCase = destination;
+				this.transform.position = destination;
 				Path.RemoveAt(0);
 			}
 		}
 	}
 
+	public void WakeUp()
+	{
+		IsWaiting = false;
+	}
+	
+	public void Death()
+	{
+		IsDead = true;
+		gameObject.SetActive(false);
+	}
+
+	public void Revive()
+	{
+		IsDead = false;
+		_delaiStartElapsed = 0;
+		Path = new List<Waypoint>();
+		IsWaiting = false;
+	}
+
+	public void SetPath(List<Waypoint> path)
+	{
+		Path = path;
+		LastCase = Path[0].Position;
+		if (Path.Count > 0)
+			Path.RemoveAt(0);
+	}
+
 	public void AddScore(int score)
 	{
 		Score += score;
-	}
-
-	private static Vector3 XYtoX0Z(Vector2 vector)
-	{
-		return new Vector3(vector.x, 0.5f, -vector.y);
-	}
-
-	private static Vector2 X0ZtoXY(Vector3 vector)
-	{
-		return new Vector2(vector.x, -vector.z);
-	}
-
-	private static Vector3 MoveToDir(PlayerMove move)
-	{
-		switch (move)
-		{
-		case PlayerMove.UP: return Vector3.forward;
-		case PlayerMove.RIGHT: return Vector3.right;
-		case PlayerMove.DOWN: return Vector3.back;
-		case PlayerMove.LEFT: return Vector3.left;
-		}
-		return Vector3.zero;
-	}
-
-	public enum PlayerMove
-	{
-		UP = 0, RIGHT = 1, DOWN = 2, LEFT = 3
 	}
 }
