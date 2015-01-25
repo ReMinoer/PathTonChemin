@@ -56,10 +56,10 @@ public class PlayerMotor : DesignPattern.Factory<PlayerMotor>
 			Vector3 destination = waypoint.Position;
 			Vector3 direction = (destination - this.transform.position).normalized;
 
-			if (direction == Vector3.left) this.transform.rotation = Quaternion.AngleAxis(0, Vector3.up);
-			if (direction == Vector3.right) this.transform.rotation = Quaternion.AngleAxis(180, Vector3.up);
-			if (direction == Vector3.forward) this.transform.rotation = Quaternion.AngleAxis(90, Vector3.up);
-			if (direction == Vector3.back) this.transform.rotation = Quaternion.AngleAxis(270, Vector3.up);
+			if (direction == Vector3.left) this.transform.rotation = Quaternion.AngleAxis(-90, Vector3.up);
+			if (direction == Vector3.right) this.transform.rotation = Quaternion.AngleAxis(90, Vector3.up);
+			if (direction == Vector3.forward) this.transform.rotation = Quaternion.AngleAxis(0, Vector3.up);
+			if (direction == Vector3.back) this.transform.rotation = Quaternion.AngleAxis(180, Vector3.up);
 
 			this.transform.position += direction * Speed * Time.deltaTime;
 			
@@ -78,6 +78,11 @@ public class PlayerMotor : DesignPattern.Factory<PlayerMotor>
 			Death();
 			Game.Instance.CheckAllPlayersDead();
 		}
+	}
+
+	public void SetInitialDirection(Vector3 _lookAt)
+	{
+		this.transform.LookAt(_lookAt);
 	}
 
 	public void WakeUp()
@@ -116,8 +121,7 @@ public class PlayerMotor : DesignPattern.Factory<PlayerMotor>
 			return;
 
 		LastCase = Path[0].Position;
-		//Vector3 direction = (TileManager.Instance.GetTileEnd(playerId).transform.position - this.transform.position).normalized;
-		this.transform.LookAt(TileManager.Instance.GetTileEnd(playerId).transform.position);
+		
 		if (Path.Count > 0)
 			_pathIndex++;
 	}

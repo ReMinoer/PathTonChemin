@@ -77,6 +77,7 @@ public class Game : DesignPattern.Singleton<Game>
 			Players[i].gameObject.SetActive(false);
 			Players[i].Revive();
 			Players[i].transform.position = TileManager.Instance.GetTileStart(i+1).transform.position;
+			Players[i].SetInitialDirection(TileManager.Instance.GetTileEnd(i+1).transform.position);
 		}
 
 		TileManager.Instance.RoundInit();
