@@ -34,6 +34,16 @@ public class Tile : MonoBehaviour {
 
 
 	// ----------
+	// TILE
+	// ----------
+
+	public void Action (PlayerMotor _player)
+	{
+
+	}
+
+
+	// ----------
 	// UTILITIES
 	// ----------
 
