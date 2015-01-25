@@ -27,6 +27,9 @@ public class Game : DesignPattern.Singleton<Game>
 	void Start ()
 	{
 		_currentRound = 1;
+		
+		foreach (PlayerMotor player in Players)
+			player.gameObject.SetActive(false);
 
 		tacticalPhases = new List<TacticalPhase>();
 		for(int player = 1; player <= Players.Count; player++)
@@ -43,10 +46,11 @@ public class Game : DesignPattern.Singleton<Game>
 	{
 		_currentPlayer = 1;
 
-		foreach (PlayerMotor player in Players)
+		for (int i = 0; i < Players.Count; i++)
 		{
-			player.gameObject.SetActive(false);
-			player.Revive();
+			Players[i].gameObject.SetActive(false);
+			Players[i].Revive();
+			Players[i].transform.position = TileManager.Instance.GetTileStart(i+1).transform.position;
 		}
 
 		StatusTextManager.ChangeState(StatusTextManager.State.RoundStart, _currentRound);
@@ -127,6 +131,8 @@ public class Game : DesignPattern.Singleton<Game>
 	void HandleActionEvents()
 	{
 		for (int i = 0; i < Players.Count; i++)
+		{
+			// Check contect between players
 			for (int j = 0; j < Players.Count; j++)
 				if (i != j
 				    && (Players[i].transform.position == Players[j].transform.position
@@ -136,23 +142,38 @@ public class Game : DesignPattern.Singleton<Game>
 					PlayerKilled(i);
 					PlayerKilled(j);
 				}
+
+			// Check player on end tile
+			if (Players[i].transform.position == TileManager.Instance.GetTileEnd(i+1).transform.position)
+				PlayerWin();
+		}
 	}
 
 	void WakeUpAll()
 	{
 		foreach(PlayerMotor player in Players)
-			player.WakeUp();
+			if (!player.IsDead)
+				player.WakeUp();
 	}
 
 	void PlayerKilled(int idPlayer)
 	{
 		Players[idPlayer].Death();
+		CheckAllPlayersDead();
+	}
+
+	public void CheckAllPlayersDead()
+	{
 		if (Players.All(p => p.IsDead))
 			ActionEnd();
 	}
 	
 	void PlayerWin()
 	{
+		foreach(PlayerMotor player in Players)
+			if (!player.IsDead)
+				player.Freeze();
+
 		ActionEnd();
 	}
 
