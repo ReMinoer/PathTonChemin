@@ -41,20 +41,26 @@ public class PlayerMotor : DesignPattern.Factory<PlayerMotor>
 		if (_delaiStartElapsed < _delaiStartPeriod)
 			return;
 		
+		if (IsFreeze)
+			return;
+		
 		if (Path.Count == 0)
 		{
 			Death();
 			Game.Instance.CheckAllPlayersDead();
 		}
 
-		if (IsFreeze)
-			return;
-
 		if (_pathIndex < Path.Count && !IsWaiting)
 		{
 			Waypoint waypoint = Path[_pathIndex];
 			Vector3 destination = waypoint.Position;
 			Vector3 direction = (destination - this.transform.position).normalized;
+
+			if (direction == Vector3.left) this.transform.rotation = Quaternion.AngleAxis(0, Vector3.up);
+			if (direction == Vector3.right) this.transform.rotation = Quaternion.AngleAxis(180, Vector3.up);
+			if (direction == Vector3.forward) this.transform.rotation = Quaternion.AngleAxis(90, Vector3.up);
+			if (direction == Vector3.back) this.transform.rotation = Quaternion.AngleAxis(270, Vector3.up);
+
 			this.transform.position += direction * Speed * Time.deltaTime;
 			
 			Vector3 diff = waypoint.Position - LastCase;
@@ -102,7 +108,7 @@ public class PlayerMotor : DesignPattern.Factory<PlayerMotor>
 		IsFreeze = true;
 	}
 
-	public void SetPath(List<Waypoint> path)
+	public void SetPath(List<Waypoint> path, int playerId)
 	{
 		Path = path;
 
@@ -110,6 +116,8 @@ public class PlayerMotor : DesignPattern.Factory<PlayerMotor>
 			return;
 
 		LastCase = Path[0].Position;
+		//Vector3 direction = (TileManager.Instance.GetTileEnd(playerId).transform.position - this.transform.position).normalized;
+		this.transform.LookAt(TileManager.Instance.GetTileEnd(playerId).transform.position);
 		if (Path.Count > 0)
 			_pathIndex++;
 	}

@@ -86,6 +86,8 @@ public class Game : DesignPattern.Singleton<Game>
 	
 	void TacticalInit()
 	{
+		Players[_currentPlayer-1].gameObject.SetActive(true);
+		Players[_currentPlayer-1].Freeze();
 		AudioManager.Instance.ChangeSong(AudioManager.SongType.Tactical, _currentPlayer-1, 1);
 		StatusTextManager.ChangeState(StatusTextManager.State.TacticalStart, _currentPlayer);
 	}
@@ -107,6 +109,8 @@ public class Game : DesignPattern.Singleton<Game>
 	
 	void TacticalTimerEnd()
 	{
+		Players[_currentPlayer-1].gameObject.SetActive(false);
+		Players[_currentPlayer-1].Revive();
 		TacticalPhases[_currentPlayer-1].EndTacticalPhase();
 		StatusTextManager.ChangeState(StatusTextManager.State.TacticalEnd);
 	}
@@ -131,9 +135,7 @@ public class Game : DesignPattern.Singleton<Game>
 	void Play()
 	{
 		for(int player = 1; player <= Players.Count; player++)
-		{
-			Players[player-1].SetPath(TacticalPhases[player-1].waypoints);
-		}
+			Players[player-1].SetPath(TacticalPhases[player-1].waypoints, player);
 		PlayerInterfaceManager.ChangeState(PlayerInterfaceManager.State.Action);
 	}
 
@@ -162,8 +164,15 @@ public class Game : DesignPattern.Singleton<Game>
 	{
 		for (int i = 0; i < Players.Count; i++)
 		{
+			if (Players[i].IsDead)
+				continue;
+
 			// Check contect between players
 			for (int j = 0; j < Players.Count; j++)
+			{
+				if (Players[j].IsDead)
+					continue;
+
 				if (i != j
 				    && (Players[i].transform.position == Players[j].transform.position
 				    || (Players[i].transform.position == Players[j].LastCase
@@ -172,6 +181,7 @@ public class Game : DesignPattern.Singleton<Game>
 					PlayerKilled(i);
 					PlayerKilled(j);
 				}
+			}
 
 			// Check current tile action
 			if (Players[i].CurrentTile != null)
