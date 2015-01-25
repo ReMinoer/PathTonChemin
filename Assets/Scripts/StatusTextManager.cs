@@ -56,7 +56,7 @@ public class StatusTextManager : DesignPattern.Singleton<StatusTextManager>
 			List<KeyValuePair<int, int>> scoresList = scores.ToList();
 			scoresList.Sort((firstPair,nextPair) =>
 			    {
-					return firstPair.Value.CompareTo(nextPair.Value);
+					return -firstPair.Value.CompareTo(nextPair.Value);
 				}
 			);
 
