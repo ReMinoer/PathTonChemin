@@ -16,7 +16,6 @@ public class TacticalPhase : DesignPattern.Factory<TacticalPhase> {
 	private Tile lastClicked = null;
 	private bool firstClick = true;
 
-
 	// ----------
 	// UNITY
 	// ----------

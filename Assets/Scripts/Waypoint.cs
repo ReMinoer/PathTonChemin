@@ -27,6 +27,7 @@ public class Waypoint : DesignPattern.Factory<Waypoint> {
 	void Start ()
 	{
 		transform.position = tile.transform.position;
+
 	}
 	
 	void Update ()

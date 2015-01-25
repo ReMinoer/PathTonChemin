@@ -87,6 +87,7 @@ public class PlayerMotor : DesignPattern.Factory<PlayerMotor>
 	
 	public void Death()
 	{
+		audio.Play();
 		IsWaiting = true;
 		IsDead = true;
 		gameObject.SetActive(false);
