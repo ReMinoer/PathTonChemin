@@ -7,7 +7,13 @@ public class PlayerMotor : DesignPattern.Factory<PlayerMotor>
 {
 	public List<Waypoint> Path { get; private set; }
 	private int _pathIndex = 0;
-	public Tile CurrentTile { get { return Path[_pathIndex].tile; } }
+	public Tile CurrentTile
+	{
+		get
+		{
+			return _pathIndex < Path.Count ? Path[_pathIndex].tile : null;
+		}
+	}
 	public Vector3 LastCase { get; private set; }
 
 	public bool IsWaiting { get; private set; }
@@ -52,7 +58,7 @@ public class PlayerMotor : DesignPattern.Factory<PlayerMotor>
 			
 			Vector3 diff = waypoint.Position - LastCase;
 
-			if (Vector3.Dot(direction, diff) < -0.5)
+			if (destination == this.transform.position || Vector3.Dot(direction, diff) < -0.5)
 			{
 				IsWaiting = true;
 				LastCase = destination;
