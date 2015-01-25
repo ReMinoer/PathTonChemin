@@ -143,6 +143,9 @@ public class Game : DesignPattern.Singleton<Game>
 					PlayerKilled(j);
 				}
 
+			// Check current tile action
+			Players[i].CurrentTile.Action(Players[i]);
+
 			// Check player on end tile
 			if (Players[i].transform.position == TileManager.Instance.GetTileEnd(i+1).transform.position)
 				PlayerWin();

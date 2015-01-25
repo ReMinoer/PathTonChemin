@@ -7,7 +7,9 @@ public class PlayerMotor : MonoBehaviour
 {
 	public List<Waypoint> Path { get; private set; }
 	private int _pathIndex = 0;
+	public Tile CurrentTile { get { return Path[_pathIndex].tile; } }
 	public Vector3 LastCase { get; private set; }
+
 	public bool IsWaiting { get; private set; }
 	public bool IsDead { get; private set; }
 	public bool IsFreeze { get; private set; }
