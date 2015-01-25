@@ -34,7 +34,14 @@ public class Game : DesignPattern.Singleton<Game>
 		for(int player = 1; player <= nbPlayer; player++)
 		{
 			// Player Creation
-			PlayerMotor playerMotor = PlayerMotor.New("Prefabs/Game/Player");
+			string playerColor = "Blue";
+			if(player==2)
+				playerColor = "Orange";
+			else if(player==3)
+				playerColor = "Purple";
+			else if(player==4)
+				playerColor = "Red";
+			PlayerMotor playerMotor = PlayerMotor.New("Prefabs/Players/Player_"+playerColor);
 			playerMotor.gameObject.SetActive(false);
 			Players.Add(playerMotor);
 			// TactialPhase Creation
@@ -43,6 +50,11 @@ public class Game : DesignPattern.Singleton<Game>
 			TacticalPhases.Add(tacticalPhase);
 		}
 
+		TitleScreen();
+	}
+
+	void TitleScreen ()
+	{
 		StatusTextManager.ChangeState(StatusTextManager.State.TitleScreen);
 	}
 
@@ -228,7 +240,7 @@ public class Game : DesignPattern.Singleton<Game>
 		
 		switch (state)
 		{
-		case State.TitleScreen: Start(); break;
+		case State.TitleScreen: TitleScreen(); break;
 		case State.GameStart: GameStart(); break;
 		case State.RoundStart: RoundInit(); break;
 		case State.TacticalStart: TacticalInit(); break;
