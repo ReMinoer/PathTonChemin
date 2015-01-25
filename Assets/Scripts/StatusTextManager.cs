@@ -1,6 +1,9 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
+using System;
 using System.Collections;
+using System.Collections.Generic;
+using System.Linq;
 
 public class StatusTextManager : DesignPattern.Singleton<StatusTextManager>
 {
@@ -13,6 +16,7 @@ public class StatusTextManager : DesignPattern.Singleton<StatusTextManager>
 	public GameObject ActionStartPanel;
 	public GameObject ActionEndPanel;
 	public GameObject GameEndPanel;
+	public Text GameEndMessage;
 
 	void Awake()
 	{
@@ -42,7 +46,22 @@ public class StatusTextManager : DesignPattern.Singleton<StatusTextManager>
 		case State.TacticalEnd: panel = TacticalEndPanel; break;
 		case State.ActionStart: panel = ActionStartPanel; break;
 		case State.ActionEnd: panel = ActionEndPanel; break;
-		case State.GameEnd: panel = GameEndPanel; break;
+		case State.GameEnd:
+			panel = GameEndPanel;
+
+			Dictionary<int, int> scores = args as Dictionary<int,int>;
+			List<KeyValuePair<int, int>> scoresList = scores.ToList();
+			scoresList.Sort((firstPair,nextPair) =>
+			    {
+					return firstPair.Value.CompareTo(nextPair.Value);
+				}
+			);
+
+			string scoreText = string.Format("Player {0} win !\n", scoresList.First().Key);
+			foreach (KeyValuePair<int,int> score in scoresList)
+				scoreText += string.Format("\nPlayer {0} : {1}", score.Key, score.Value);
+			GameEndMessage.text = scoreText;
+			break;
 		default: return;
 		}
 
