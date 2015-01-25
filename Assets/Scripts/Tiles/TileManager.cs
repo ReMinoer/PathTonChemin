@@ -17,7 +17,8 @@ public class TileManager :  DesignPattern.Singleton<TileManager>
 
 	protected Tile[] tiles;
 
-	public List<TileStart> tileStart;
+	protected List<TileStart> tileStarts;
+	protected List<TileEnd> tileEnds;
 
 
 	// ----------
@@ -26,12 +27,16 @@ public class TileManager :  DesignPattern.Singleton<TileManager>
 
 	void Start ()
 	{
+		tileStarts = new List<TileStart>();
+		tileEnds = new List<TileEnd>();
 		tiles = gameObject.GetComponentsInChildren<Tile>();
 		foreach(Tile tile in tiles)
 		{
 			tile.LoadAvailableTiles(tiles);
 			if(tile.GetType() == typeof(TileStart))
-				Debug.Log("c'est trop cool Path ton chemin #VROOOUM!");
+				tileStarts.Add((TileStart)tile);
+			if(tile.GetType() == typeof(TileEnd))
+				tileEnds.Add((TileEnd)tile);
 		}
 	}
 
@@ -39,5 +44,25 @@ public class TileManager :  DesignPattern.Singleton<TileManager>
 	// ----------
 	// UTILITIES
 	// ----------
+
+	public TileStart GetTileStart (int _player)
+	{
+		foreach(TileStart tileStart in tileStarts)
+		{
+			if(tileStart.player == _player)
+				return tileStart;
+		}
+		return null;
+	}
+
+	public TileEnd GetTileEnd (int _player)
+	{
+		foreach(TileEnd tileEnd in tileEnds)
+		{
+			if(tileEnd.player == _player)
+				return tileEnd;
+		}
+		return null;
+	}
 
 }
