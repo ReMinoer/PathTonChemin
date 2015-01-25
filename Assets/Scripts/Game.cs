@@ -24,6 +24,8 @@ public class Game : DesignPattern.Singleton<Game>
 
 	public float TactiqueTime;
 
+	private bool _musicPack = true;
+
 	// Use this for initialization
 	void Start ()
 	{
@@ -43,6 +45,9 @@ public class Game : DesignPattern.Singleton<Game>
 			TacticalPhases.Add(tacticalPhase);
 		}
 
+		_musicPack = !_musicPack;
+
+		AudioManager.Instance.ChangeSong(AudioManager.SongType.ActionA, 0);
 		StatusTextManager.ChangeState(StatusTextManager.State.TitleScreen);
 	}
 
@@ -69,6 +74,7 @@ public class Game : DesignPattern.Singleton<Game>
 	
 	void TacticalInit()
 	{
+		AudioManager.Instance.ChangeSong(AudioManager.SongType.Tactical, _currentPlayer-1);
 		StatusTextManager.ChangeState(StatusTextManager.State.TacticalStart, _currentPlayer);
 	}
 	
@@ -104,6 +110,7 @@ public class Game : DesignPattern.Singleton<Game>
 	
 	void ActionInit()
 	{
+		AudioManager.Instance.ChangeSong(_musicPack ? AudioManager.SongType.ActionA : AudioManager.SongType.ActionB, _currentRound-1);
 		foreach (PlayerMotor player in Players)
 			player.gameObject.SetActive(true);
 		StatusTextManager.ChangeState(StatusTextManager.State.ActionStart);
