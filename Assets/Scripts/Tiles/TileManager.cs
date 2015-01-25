@@ -45,6 +45,14 @@ public class TileManager :  DesignPattern.Singleton<TileManager>
 	// UTILITIES
 	// ----------
 
+	public void RoundInit ()
+	{
+		foreach(Tile tile in tiles)
+		{
+			tile.RoundInit();
+		}
+	}
+
 	public TileStart GetTileStart (int _player)
 	{
 		foreach(TileStart tileStart in tileStarts)
