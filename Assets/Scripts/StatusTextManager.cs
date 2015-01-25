@@ -7,6 +7,7 @@ using System.Linq;
 
 public class StatusTextManager : DesignPattern.Singleton<StatusTextManager>
 {
+	public GameObject TitleScreenPanel;
 	public GameObject GameStartPanel;
 	public GameObject RoundStartPanel;
 	public Text RoundStartMessage;
@@ -20,6 +21,7 @@ public class StatusTextManager : DesignPattern.Singleton<StatusTextManager>
 
 	void Awake()
 	{
+		TitleScreenPanel.SetActive(false);
 		GameStartPanel.SetActive(false);
 		RoundStartPanel.SetActive(false);
 		TacticalStartPanel.SetActive(false);
@@ -34,6 +36,7 @@ public class StatusTextManager : DesignPattern.Singleton<StatusTextManager>
 		GameObject panel;
 		switch (state)
 		{
+		case State.TitleScreen: panel = TitleScreenPanel; break;
 		case State.GameStart: panel = GameStartPanel; break;
 		case State.RoundStart:
 			panel = RoundStartPanel;
@@ -66,7 +69,8 @@ public class StatusTextManager : DesignPattern.Singleton<StatusTextManager>
 		}
 
 		panel.SetActive(true);
-		panel.animation.Play();
+		if (panel.GetComponent<Animation>() != null)
+			panel.animation.Play();
 	}
 
 	public enum State
@@ -77,6 +81,7 @@ public class StatusTextManager : DesignPattern.Singleton<StatusTextManager>
 		TacticalEnd,
 		ActionStart,
 		ActionEnd,
-		GameEnd
+		GameEnd,
+		TitleScreen
 	}
 }

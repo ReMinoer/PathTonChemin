@@ -43,6 +43,11 @@ public class Game : DesignPattern.Singleton<Game>
 			TacticalPhases.Add(tacticalPhase);
 		}
 
+		StatusTextManager.ChangeState(StatusTextManager.State.TitleScreen);
+	}
+
+	void GameStart()
+	{
 		StatusTextManager.ChangeState(StatusTextManager.State.GameStart);
 	}
 
@@ -214,7 +219,8 @@ public class Game : DesignPattern.Singleton<Game>
 		
 		switch (state)
 		{
-		case State.GameStart: Start(); break;
+		case State.TitleScreen: Start(); break;
+		case State.GameStart: GameStart(); break;
 		case State.RoundStart: RoundInit(); break;
 		case State.TacticalStart: TacticalInit(); break;
 		case State.Tactical: Tactical(); break;
@@ -240,6 +246,7 @@ public class Game : DesignPattern.Singleton<Game>
 		PlayerKilled,
 		PlayerWin,
 		NextRound,
-		GameEnd
+		GameEnd,
+		TitleScreen
 	}
 }
