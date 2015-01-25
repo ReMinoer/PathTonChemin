@@ -13,10 +13,11 @@ public class Game : DesignPattern.Singleton<Game>
 	public StatusTextManager StatusTextManager;
 	public PlayerInterfaceManager PlayerInterfaceManager;
 
-	public List<PlayerMotor> Players = new List<PlayerMotor>();
+	public int nbPlayer = 1;
+	private List<PlayerMotor> Players;
 	private int _currentPlayer;
 
-	private List<TacticalPhase> tacticalPhases;
+	private List<TacticalPhase> TacticalPhases;
 
 	public int NbRounds = 5;
 	private int _currentRound;
@@ -27,16 +28,19 @@ public class Game : DesignPattern.Singleton<Game>
 	void Start ()
 	{
 		_currentRound = 1;
-		
-		foreach (PlayerMotor player in Players)
-			player.gameObject.SetActive(false);
 
-		tacticalPhases = new List<TacticalPhase>();
-		for(int player = 1; player <= Players.Count; player++)
+		TacticalPhases = new List<TacticalPhase>();
+		Players = new List<PlayerMotor>();
+		for(int player = 1; player <= nbPlayer; player++)
 		{
+			// Player Creation
+			PlayerMotor playerMotor = PlayerMotor.New("Prefabs/Game/Player");
+			playerMotor.gameObject.SetActive(false);
+			Players.Add(playerMotor);
+			// TactialPhase Creation
 			TacticalPhase tacticalPhase = TacticalPhase.New();
 			tacticalPhase.Player = player;
-			tacticalPhases.Add(tacticalPhase);
+			TacticalPhases.Add(tacticalPhase);
 		}
 
 		StatusTextManager.ChangeState(StatusTextManager.State.GameStart);
@@ -72,13 +76,13 @@ public class Game : DesignPattern.Singleton<Game>
 		case 4: state = PlayerInterfaceManager.State.TacticalPlayerFour; break;
 		default: return;
 		}
-		tacticalPhases[_currentPlayer-1].StartTacticalPhase();
+		TacticalPhases[_currentPlayer-1].StartTacticalPhase();
 		PlayerInterfaceManager.ChangeState(state);
 	}
 	
 	void TacticalTimerEnd()
 	{
-		tacticalPhases[_currentPlayer-1].EndTacticalPhase();
+		TacticalPhases[_currentPlayer-1].EndTacticalPhase();
 		StatusTextManager.ChangeState(StatusTextManager.State.TacticalEnd);
 	}
 	
@@ -102,7 +106,7 @@ public class Game : DesignPattern.Singleton<Game>
 	{
 		for(int player = 1; player <= Players.Count; player++)
 		{
-			Players[player-1].SetPath(tacticalPhases[player-1].waypoints);
+			Players[player-1].SetPath(TacticalPhases[player-1].waypoints);
 		}
 		PlayerInterfaceManager.ChangeState(PlayerInterfaceManager.State.Action);
 	}

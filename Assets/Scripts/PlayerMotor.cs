@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 
-public class PlayerMotor : MonoBehaviour
+public class PlayerMotor : DesignPattern.Factory<PlayerMotor>
 {
 	public List<Waypoint> Path { get; private set; }
 	private int _pathIndex = 0;
