@@ -55,6 +55,13 @@ public class TacticalData : DesignPattern.Factory<TacticalData> {
 		if(state==State.None)
 		{
 			state = State.TacticalPhase;
+			if(waypoints != null)
+			{
+				foreach(Waypoint waypoint in waypoints)
+				{
+					Destroy(waypoint.gameObject);
+				}
+			}
 			// Init Phase
 			waypoints = new List<Waypoint>();
 		}

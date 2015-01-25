@@ -28,12 +28,6 @@ public class Game : DesignPattern.Singleton<Game>
 	{
 		_currentRound = 1;
 
-		foreach (PlayerMotor player in Players)
-		{
-			player.gameObject.SetActive(false);
-			player.Revive();
-		}
-
 		tacticalDatas = new List<TacticalData>();
 		for(int player = 1; player <= Players.Count; player++)
 		{
@@ -48,6 +42,12 @@ public class Game : DesignPattern.Singleton<Game>
 	void RoundInit()
 	{
 		_currentPlayer = 1;
+
+		foreach (PlayerMotor player in Players)
+		{
+			player.gameObject.SetActive(false);
+			player.Revive();
+		}
 
 		StatusTextManager.ChangeState(StatusTextManager.State.RoundStart, _currentRound);
 	}

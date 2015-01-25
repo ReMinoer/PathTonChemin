@@ -6,6 +6,7 @@ using System.Linq;
 public class PlayerMotor : MonoBehaviour
 {
 	public List<Waypoint> Path { get; private set; }
+	private int _pathIndex = 0;
 	public Vector3 LastCase { get; private set; }
 	public bool IsWaiting { get; private set; }
 	public bool IsDead { get; private set; }
@@ -30,9 +31,9 @@ public class PlayerMotor : MonoBehaviour
 		if (_delaiStartElapsed < _delaiStartPeriod)
 			return;
 
-		if (Path.Any() && !IsWaiting)
+		if (_pathIndex < Path.Count && !IsWaiting)
 		{
-			Waypoint waypoint = Path.First();
+			Waypoint waypoint = Path[_pathIndex];
 			Vector3 destination = waypoint.Position + Vector3.up * 0.5f;
 			Vector3 direction = (destination - this.transform.position).normalized;
 			this.transform.position += direction * Speed * Time.deltaTime;
@@ -44,7 +45,7 @@ public class PlayerMotor : MonoBehaviour
 				IsWaiting = true;
 				LastCase = destination;
 				this.transform.position = destination;
-				Path.RemoveAt(0);
+				_pathIndex++;
 			}
 		}
 	}
@@ -65,6 +66,7 @@ public class PlayerMotor : MonoBehaviour
 		IsDead = false;
 		_delaiStartElapsed = 0;
 		Path = new List<Waypoint>();
+		_pathIndex = 0;
 		IsWaiting = false;
 	}
 
@@ -73,7 +75,7 @@ public class PlayerMotor : MonoBehaviour
 		Path = path;
 		LastCase = Path[0].Position;
 		if (Path.Count > 0)
-			Path.RemoveAt(0);
+			_pathIndex++;
 	}
 
 	public void AddScore(int score)
