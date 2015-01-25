@@ -10,6 +10,7 @@ public class PlayerMotor : MonoBehaviour
 	public Vector3 LastCase { get; private set; }
 	public bool IsWaiting { get; private set; }
 	public bool IsDead { get; private set; }
+	public bool IsFreeze { get; private set; }
 
 	private const float _delaiStartPeriod = 5;
 	private float _delaiStartElapsed;
@@ -30,11 +31,20 @@ public class PlayerMotor : MonoBehaviour
 		_delaiStartElapsed += Time.deltaTime;
 		if (_delaiStartElapsed < _delaiStartPeriod)
 			return;
+		
+		if (Path.Count == 0)
+		{
+			Death();
+			Game.Instance.CheckAllPlayersDead();
+		}
+
+		if (IsFreeze)
+			return;
 
 		if (_pathIndex < Path.Count && !IsWaiting)
 		{
 			Waypoint waypoint = Path[_pathIndex];
-			Vector3 destination = waypoint.Position + Vector3.up * 0.5f;
+			Vector3 destination = waypoint.Position;
 			Vector3 direction = (destination - this.transform.position).normalized;
 			this.transform.position += direction * Speed * Time.deltaTime;
 			
@@ -48,6 +58,11 @@ public class PlayerMotor : MonoBehaviour
 				_pathIndex++;
 			}
 		}
+		else if (!IsWaiting)
+		{
+			Death();
+			Game.Instance.CheckAllPlayersDead();
+		}
 	}
 
 	public void WakeUp()
@@ -57,6 +72,7 @@ public class PlayerMotor : MonoBehaviour
 	
 	public void Death()
 	{
+		IsWaiting = true;
 		IsDead = true;
 		gameObject.SetActive(false);
 	}
@@ -68,11 +84,21 @@ public class PlayerMotor : MonoBehaviour
 		Path = new List<Waypoint>();
 		_pathIndex = 0;
 		IsWaiting = false;
+		IsFreeze = false;
+	}
+
+	public void Freeze()
+	{
+		IsFreeze = true;
 	}
 
 	public void SetPath(List<Waypoint> path)
 	{
 		Path = path;
+
+		if (Path.Count == 0)
+			return;
+
 		LastCase = Path[0].Position;
 		if (Path.Count > 0)
 			_pathIndex++;

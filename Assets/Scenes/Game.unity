@@ -10229,7 +10229,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9616fb5f7dcc7354caae086a6ac0f5f4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  GameStateToInvoke: 10
+  GameStateToInvoke: 0
 --- !u!225 &1795698983
 CanvasGroup:
   m_ObjectHideFlags: 0
