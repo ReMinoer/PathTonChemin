@@ -24,6 +24,7 @@ public class PlayerMotor : DesignPattern.Factory<PlayerMotor>
 	private float _delaiStartElapsed;
 
 	public int Score = 0;
+	public int bufferScore = 0;
 
 	public float Speed = 2f;
 
@@ -93,6 +94,7 @@ public class PlayerMotor : DesignPattern.Factory<PlayerMotor>
 		_pathIndex = 0;
 		IsWaiting = false;
 		IsFreeze = false;
+		bufferScore = 0;
 	}
 
 	public void Freeze()
@@ -114,6 +116,13 @@ public class PlayerMotor : DesignPattern.Factory<PlayerMotor>
 
 	public void AddScore(int score)
 	{
-		Score += score;
+		bufferScore += score;
+	}
+
+	public void ValidateScore (PlayerMotor _winner)
+	{
+		if(this == _winner)
+			bufferScore*=3;
+		Score = bufferScore;
 	}
 }

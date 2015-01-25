@@ -37,7 +37,12 @@ public class Tile : MonoBehaviour {
 	// TILE
 	// ----------
 
-	public void Action (PlayerMotor _player)
+	virtual public void RoundInit ()
+	{
+		
+	}
+
+	virtual public void Action (PlayerMotor _player)
 	{
 
 	}

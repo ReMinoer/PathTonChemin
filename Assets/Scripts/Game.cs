@@ -62,6 +62,8 @@ public class Game : DesignPattern.Singleton<Game>
 			Players[i].transform.position = TileManager.Instance.GetTileStart(i+1).transform.position;
 		}
 
+		TileManager.Instance.RoundInit();
+
 		StatusTextManager.ChangeState(StatusTextManager.State.RoundStart, _currentRound);
 	}
 	
@@ -158,7 +160,7 @@ public class Game : DesignPattern.Singleton<Game>
 
 			// Check player on end tile
 			if (Players[i].transform.position == TileManager.Instance.GetTileEnd(i+1).transform.position)
-				PlayerWin();
+				PlayerWin(i);
 		}
 	}
 
@@ -178,14 +180,21 @@ public class Game : DesignPattern.Singleton<Game>
 	public void CheckAllPlayersDead()
 	{
 		if (Players.All(p => p.IsDead))
+		{
+			foreach(PlayerMotor player in Players)
+				player.ValidateScore(null);
 			ActionEnd();
+		}
 	}
 	
-	void PlayerWin()
+	void PlayerWin(int _winner)
 	{
 		foreach(PlayerMotor player in Players)
+		{
+			player.ValidateScore(Players[_winner]);
 			if (!player.IsDead)
 				player.Freeze();
+		}
 
 		ActionEnd();
 	}
@@ -228,7 +237,7 @@ public class Game : DesignPattern.Singleton<Game>
 		case State.TacticalNextPlayer: TacticalNextPlayer(); break;
 		case State.Play: Play(); break;
 		case State.PlayerKilled: PlayerKilled((int)args); break;
-		case State.PlayerWin: PlayerWin(); break;
+		// case State.PlayerWin: PlayerWin(); break;
 		case State.NextRound: NextRound(); break;
 		case State.GameEnd: GameEnd(); break;
 		}
