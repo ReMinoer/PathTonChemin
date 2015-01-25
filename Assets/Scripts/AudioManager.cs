@@ -17,7 +17,7 @@ public class AudioManager : DesignPattern.Singleton<AudioManager> {
 	private bool _stopRequest;
 
 	// Use this for initialization
-	void Start ()
+	void Awake ()
 	{
 		_fade = -1;
 		_elapsedFade = 0;
