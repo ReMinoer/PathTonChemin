@@ -16,7 +16,7 @@ public class Game : DesignPattern.Singleton<Game>
 	public List<PlayerMotor> Players = new List<PlayerMotor>();
 	private int _currentPlayer;
 
-	private List<TacticalData> tacticalDatas;
+	private List<TacticalPhase> tacticalPhases;
 
 	public int NbRounds = 5;
 	private int _currentRound;
@@ -28,12 +28,12 @@ public class Game : DesignPattern.Singleton<Game>
 	{
 		_currentRound = 1;
 
-		tacticalDatas = new List<TacticalData>();
+		tacticalPhases = new List<TacticalPhase>();
 		for(int player = 1; player <= Players.Count; player++)
 		{
-			TacticalData tacticalData = TacticalData.New();
-			tacticalData.Player = player;
-			tacticalDatas.Add(tacticalData);
+			TacticalPhase tacticalPhase = TacticalPhase.New();
+			tacticalPhase.Player = player;
+			tacticalPhases.Add(tacticalPhase);
 		}
 
 		StatusTextManager.ChangeState(StatusTextManager.State.GameStart);
@@ -68,13 +68,13 @@ public class Game : DesignPattern.Singleton<Game>
 		case 4: state = PlayerInterfaceManager.State.TacticalPlayerFour; break;
 		default: return;
 		}
-		tacticalDatas[_currentPlayer-1].StartTacticalPhase();
+		tacticalPhases[_currentPlayer-1].StartTacticalPhase();
 		PlayerInterfaceManager.ChangeState(state);
 	}
 	
 	void TacticalTimerEnd()
 	{
-		tacticalDatas[_currentPlayer-1].EndTacticalPhase();
+		tacticalPhases[_currentPlayer-1].EndTacticalPhase();
 		StatusTextManager.ChangeState(StatusTextManager.State.TacticalEnd);
 	}
 	
@@ -98,7 +98,7 @@ public class Game : DesignPattern.Singleton<Game>
 	{
 		for(int player = 1; player <= Players.Count; player++)
 		{
-			Players[player-1].SetPath(tacticalDatas[player-1].waypoints);
+			Players[player-1].SetPath(tacticalPhases[player-1].waypoints);
 		}
 		PlayerInterfaceManager.ChangeState(PlayerInterfaceManager.State.Action);
 	}

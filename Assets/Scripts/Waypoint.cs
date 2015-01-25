@@ -10,7 +10,7 @@ public class Waypoint : DesignPattern.Factory<Waypoint> {
 	// public Renderer spriteCenter;
 	// public Renderer spriteHalo;
 
-	public TacticalData tacticalData;
+	public TacticalPhase tacticalPhase;
 	public Tile tile;
 	public int state;
 	// public Action action;
