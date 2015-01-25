@@ -20,6 +20,8 @@ public class Game : DesignPattern.Singleton<Game>
 	public int NbRounds = 5;
 	private int _currentRound;
 
+	public float TactiqueTime;
+
 	// Use this for initialization
 	void Start ()
 	{

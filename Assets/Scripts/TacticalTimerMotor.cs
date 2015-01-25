@@ -5,7 +5,6 @@ using System.Collections;
 public class TacticalTimerMotor : MonoBehaviour {
 
 	public GameObject PlayerInterface;
-	public float TimeLeft = 30;
 	private float _timeleft;
 
 	// Use this for initialization
@@ -14,7 +13,7 @@ public class TacticalTimerMotor : MonoBehaviour {
 
 	public void Reset()
 	{
-		_timeleft = TimeLeft;
+		_timeleft = Game.Instance.TactiqueTime;
 	}
 	
 	// Update is called once per frame

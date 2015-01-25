@@ -929,7 +929,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   PlayerInterface: {fileID: 481906690}
-  TimeLeft: 30
 --- !u!114 &203246685
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1242,6 +1241,7 @@ MonoBehaviour:
   PlayerInterfaceManager: {fileID: 1834460793}
   NbPlayers: 4
   NbRounds: 5
+  TactiqueTime: 10
 --- !u!1 &253410181
 GameObject:
   m_ObjectHideFlags: 0
@@ -2196,7 +2196,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   PlayerInterface: {fileID: 56674450}
-  TimeLeft: 30
 --- !u!114 &451164203
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3244,7 +3243,7 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 553814991}
   m_LocalRotation: {x: .707106829, y: 0, z: 0, w: .707106829}
-  m_LocalPosition: {x: 0, y: 8, z: -0}
+  m_LocalPosition: {x: 0, y: 8.47999954, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
@@ -5736,7 +5735,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   PlayerInterface: {fileID: 808990265}
-  TimeLeft: 30
 --- !u!114 &909733858
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -7516,7 +7514,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   PlayerInterface: {fileID: 533580030}
-  TimeLeft: 30
 --- !u!114 &1246776078
 MonoBehaviour:
   m_ObjectHideFlags: 0
