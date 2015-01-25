@@ -2362,7 +2362,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   StatusTextManager: {fileID: 1218955594}
   PlayerInterfaceManager: {fileID: 1834460793}
-  nbPlayer: 4
+  nbPlayer: 2
   NbRounds: 1
   TactiqueTime: 10
 --- !u!1001 &248576632
