@@ -7,7 +7,8 @@ public class Waypoint : DesignPattern.Factory<Waypoint> {
 	// VARIABLE
 	// ----------
 
-	public Sprite sprite;
+	// public Renderer spriteCenter;
+	// public Renderer spriteHalo;
 
 	public TacticalData tacticalData;
 	public Tile tile;

@@ -84,7 +84,12 @@ public class TacticalData : DesignPattern.Factory<TacticalData> {
 					Tile tile = (hit.transform.gameObject).GetComponent<Tile>();
 					if(tile==null)
 						break;
-					if(waypoints.Count>0)
+					if(waypoints.Count==0)
+					{
+						if(tile != TileManager.Instance.GetTileStart(Player))
+							break;
+					}
+					else
 					{
 						Tile lastTile = waypoints[waypoints.Count-1].tile;
 						// Restart after 
@@ -104,7 +109,23 @@ public class TacticalData : DesignPattern.Factory<TacticalData> {
 						if(!lastTile.TileAvailable(tile))
 							break;
 					}
-					Waypoint waypoint = Waypoint.New("Prefabs/Waypoints/Waypoint");
+					string colorPlayer = "";
+					switch(Player)
+					{
+						case 1:
+							colorPlayer = "_Blue";
+						break;
+						case 2:
+							colorPlayer = "_Orange";
+						break;
+						case 3:
+							colorPlayer = "_Purple";
+						break;
+						case 4:
+							colorPlayer = "_Red";
+						break;
+					}
+					Waypoint waypoint = Waypoint.New("Prefabs/Waypoints/Waypoint"+colorPlayer);
 					waypoint.transform.SetParent(transform);
 					waypoint.tile = tile;
 					waypoint.state = waypoints.Count+1;
